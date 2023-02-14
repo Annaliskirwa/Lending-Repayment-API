@@ -16,3 +16,7 @@ spring:
         show_sql: true
         format_sql: true
     generate-ddl: true
+
+app-properties:
+  api-username: ${API_USERNAME:admin}
+  api-password: ${API_PASSWORD:admin}
