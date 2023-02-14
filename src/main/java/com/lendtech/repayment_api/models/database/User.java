@@ -15,25 +15,25 @@ public class User {
 
     @Id
     @Column
-    private String id;
+    private Long id;
 
     @Size(max = 16)
     @NotNull
-    @Column(name = "MSISDN", nullable = false, length = 16)
+    @Column(name = "MSISDN", nullable = false)
     private String msisdn;
 
     @Size(max = 50)
     @NotNull
-    @Column(name = "FIRST_NAME", nullable = false, length = 50)
+    @Column(name = "FIRST_NAME", nullable = false)
     private String firstName;
 
     @Size(max = 50)
     @NotNull
-    @Column(name = "LAST_NAME", nullable = false, length = 50)
+    @Column(name = "LAST_NAME", nullable = false)
     private String lastName;
 
     @Size(max = 10)
     @NotNull
-    @Column(name = "GENDER", nullable = false, length = 10)
+    @Column(name = "GENDER", nullable = false)
     private String gender;
 }
