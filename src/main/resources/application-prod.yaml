@@ -20,3 +20,6 @@ spring:
 app-properties:
   api-username: ${API_USERNAME:admin}
   api-password: ${API_PASSWORD:admin}
+
+proc:
+  scheduler: ${PROC_SCHEDULER:86400}
