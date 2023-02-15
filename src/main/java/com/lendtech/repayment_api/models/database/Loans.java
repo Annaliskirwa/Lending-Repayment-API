@@ -14,8 +14,9 @@ import java.util.List;
 @Table(name = "LENDTECH_LOANS")
 public class Loans {
     @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
     @Column
-    private Long id;
+    private Long loanID;
 
     @Size(max = 50)
     @NotNull
@@ -35,7 +36,7 @@ public class Loans {
 
 
     @ManyToOne(fetch = FetchType.EAGER, optional = false)
-    @JoinColumn(name = "msisdn", nullable = false)
+    @JoinColumn(name = "userID", nullable = false)
     @OnDelete(action = OnDeleteAction.CASCADE)
     private User user;
 }
