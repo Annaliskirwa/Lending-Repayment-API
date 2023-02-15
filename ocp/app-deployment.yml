@@ -19,7 +19,7 @@ spec:
           defaultMode: 420
       containers:
         - name: lendtech-repayment-api
-          image: ghcr.io/annaliskirwa/lendtech-repayment-api:latest
+          image: docker.io/kirwa9431/lendtech-repayment-api:latest
           ports:
             - containerPort: 8080
           volumeMounts:

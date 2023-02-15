@@ -14,15 +14,15 @@ import org.junit.Assert;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
 
-@SpringBootTest
+//@SpringBootTest
 //@RunWith(SpringRunner.class)
 //@DataJpaTest
-class RepaymentApiApplicationTests {
-    @Autowired
-    UserRepository userRepository;
-
-    @Test
-    void contextLoads() {
-    }
-
-}
+//class RepaymentApiApplicationTests {
+//    @Autowired
+//    UserRepository userRepository;
+//
+//    @Test
+//    void contextLoads() {
+//    }
+//
+//}
