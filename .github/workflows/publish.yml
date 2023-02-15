@@ -27,7 +27,7 @@ jobs:
           oc project annaliskirwa-dev
       - name: Delete deployment
         run: |
-          oc delete deployment container-registry-example
+#          oc delete deployment container-registry-example
       - name: Deploy deployment files
         run: |
           oc apply -f ${GITHUB_WORKSPACE}/ocp -n annaliskirwa-dev
