@@ -9,6 +9,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Date;
+
 @Service
 @Slf4j
 public class CreateLoanService {
@@ -24,6 +26,8 @@ public class CreateLoanService {
             User user = userRepository.findUserByMsisdn(msisdn);
             if(null != user){
                 loans.setUser(user);
+                loans.setCreatedDate(new Date());
+                loans.setUpdatedDate(new Date());
                 loanRepository.save(loans);
                 loanWrapper.setStatus("0");
                 loanWrapper.setMessage("Loan created successfully");

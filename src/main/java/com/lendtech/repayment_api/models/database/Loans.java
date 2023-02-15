@@ -7,6 +7,7 @@ import lombok.Data;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
+import java.util.Date;
 import java.util.List;
 
 @Data
@@ -29,10 +30,13 @@ public class Loans {
     private String currency;
 
     @Column(name = "CREATED_DATE")
-    private String createdDate;
+    private Date createdDate;
 
     @Column(name = "UPDATED_DATE")
-    private String updatedDate;
+    private Date updatedDate;
+
+    @Column(name = "PRODUCT_ID")
+    private String productID;
 
 
     @ManyToOne(fetch = FetchType.EAGER, optional = false)
