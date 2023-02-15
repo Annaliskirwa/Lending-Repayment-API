@@ -3,6 +3,6 @@ spring:
   application:
     name: lendtech-repayment-api
   profiles:
-    active: dev
+    active: prod
 server:
   port: 8080

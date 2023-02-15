@@ -26,3 +26,11 @@ twilio:
   account_sid: AC5b274f17de1cfcf105463db66480bb73
   auth_token: d83a82722409c5cde77c37860bb9863b
   trial_number: +19124058761
+
+#LOGGING CONFIGURATION
+logging:
+  config: classpath:logback.xml
+
+  mvc:
+    pathmatch:
+      matching-strategy: ANT_PATH_MATCHER

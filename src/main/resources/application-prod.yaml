@@ -36,3 +36,7 @@ twilio:
   account_sid: ${TWILIO_ACCOUNT_SID:AC5b274f17de1cfcf105463db66480bb73}
   auth_token: ${TWILIO_AUTH_TOKEN:d83a82722409c5cde77c37860bb9863b}
   trial_number: ${TWILIO_TRIAL_NUMBER:+19124058761}
+
+#logging configurations
+logging:
+  config: /mnt/logback/logback.xml

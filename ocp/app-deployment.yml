@@ -1,0 +1,61 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: lendtech-repayment-api
+spec:
+  selector:
+    matchLabels:
+      app: lendtech-repayment-api
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: lendtech-repayment-api
+    spec:
+      volumes:
+      - name: logback-mount
+        configMap:
+          name: lendtech-repayment-api-logback-configmap
+          defaultMode: 420
+      containers:
+        - name: lendtech-repayment-api
+          image: ghcr.io/annaliskirwa/lendtech-repayment-api:latest
+          ports:
+            - containerPort: 8080
+          volumeMounts:
+          - name: logback-mount
+            mountPath: /mnt/logback/
+          - name: template-mount
+            mountPath: /mnt/templates/
+          env:
+            - name: JDBC_URL
+              value: jdbc:oracle:thin:@//10.219.2.45:1521/knob12
+            - name: DATABASE_USERNAME
+              valueFrom:
+                secretKeyRef:
+                  name: lendtech-repayment-api
+                  key: jdbc.username
+            - name: DATABASE_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: lendtech-repayment-api
+                  key: jdbc.password
+            - name: API_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: lendtech-repayment-api
+                  key: api.password
+            - name: API_USERNAME
+              valueFrom:
+                secretKeyRef:
+                  name: lendtech-repayment-api
+                  key: api.username
+            - name: PROC_SCHEDULER
+              value: '86400'
+            - name: TWILIO_ACCOUNT_SID
+              value: 'AC5b274f17de1cfcf105463db66480bb73'
+            - name: TWILIO_AUTH_TOKEN
+              value: 'd83a82722409c5cde77c37860bb9863b'
+            - name: TWILIO_TRIAL_NUMBER
+              value: '+19124058761'
+          imagePullPolicy: IfNotPresent
