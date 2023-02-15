@@ -11,7 +11,7 @@ jobs:
         with:
           registry: ghcr.io
           username: Annaliskirwa
-          password: ${{ secrets.WORKFLOW_GIT_ACCESS_TOKEN }}
+          password: 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
       - name: Maven
         run: |
           mvn package
