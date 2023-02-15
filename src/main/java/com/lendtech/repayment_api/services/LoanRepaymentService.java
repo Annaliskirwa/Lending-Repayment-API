@@ -2,6 +2,7 @@ package com.lendtech.repayment_api.services;
 
 import com.lendtech.repayment_api.models.body.LoanRepayment;
 import com.lendtech.repayment_api.models.body.LoanWrapper;
+import com.lendtech.repayment_api.models.body.SmsRequest;
 import com.lendtech.repayment_api.models.database.Loans;
 import com.lendtech.repayment_api.models.database.User;
 import com.lendtech.repayment_api.repository.LoanRepository;
@@ -22,8 +23,12 @@ public class LoanRepaymentService {
     @Autowired
     LoanRepository loanRepository;
 
+    @Autowired
+    SendSmsService smsService;
+
     public LoanWrapper repayLoans(LoanRepayment loanRepayment, String msisdn){
         LoanWrapper loanWrapper = new LoanWrapper();
+        SmsRequest smsRequest = new SmsRequest();
         try{
             User user = userRepository.findUserByMsisdn(msisdn);
             log.info("-----------------------[USER QUERIED]---------------------\n{}", user);
@@ -44,6 +49,8 @@ public class LoanRepaymentService {
                         loanWrapper.setMessage("Loan has been repaid successfully");
                         loanWrapper.setLoan(loans);
                         log.info("-----------------------[LOAN REPAID]---------------------\n{}", loanWrapper);
+                        smsRequest.setPhoneNumber(user.getMsisdn());
+                        smsRequest.setMessage("Your loan at LendTech has been repaid");
                         return loanWrapper;
                     }else {
                         loanWrapper.setStatus("2");

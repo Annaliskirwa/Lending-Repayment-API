@@ -1,5 +1,6 @@
 package com.lendtech.repayment_api.services;
 
+import com.lendtech.repayment_api.models.body.SmsRequest;
 import com.lendtech.repayment_api.models.body.UserWrapper;
 import com.lendtech.repayment_api.models.database.User;
 import com.lendtech.repayment_api.repository.UserRepository;
@@ -13,9 +14,12 @@ public class CreateUserService {
     @Autowired
     UserRepository userRepository;
 
+    @Autowired
+    SendSmsService smsService;
 
     public UserWrapper createUser(User user){
         UserWrapper userWrapper = new UserWrapper();
+        SmsRequest smsRequest = new SmsRequest();
         try{
             String userExists = userRepository.findUserByMsisdn(user.getMsisdn()) == null ? null : "true";
             if(userExists == "true"){
@@ -30,6 +34,9 @@ public class CreateUserService {
                 userWrapper.setStatus("0");
                 userWrapper.setUser(user);
                 log.info("-----------------------[USER CREATED]---------------------\n{}", userWrapper);
+                smsRequest.setPhoneNumber(user.getMsisdn());
+                smsRequest.setMessage("You have been created as a user at LendTech");
+                smsService.sendSms(smsRequest);
                 return userWrapper;
             }
         }catch (Exception e){

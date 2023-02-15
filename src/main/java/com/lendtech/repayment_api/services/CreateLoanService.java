@@ -1,6 +1,7 @@
 package com.lendtech.repayment_api.services;
 
 import com.lendtech.repayment_api.models.body.LoanWrapper;
+import com.lendtech.repayment_api.models.body.SmsRequest;
 import com.lendtech.repayment_api.models.database.Loans;
 import com.lendtech.repayment_api.models.database.User;
 import com.lendtech.repayment_api.repository.LoanRepository;
@@ -20,8 +21,12 @@ public class CreateLoanService {
     @Autowired
     LoanRepository loanRepository;
 
+    @Autowired
+    SendSmsService smsService;
+
     public LoanWrapper createLoan(Loans loans, String msisdn){
         LoanWrapper loanWrapper = new LoanWrapper();
+        SmsRequest smsRequest = new SmsRequest();
         try{
             User user = userRepository.findUserByMsisdn(msisdn);
             if(null != user){
@@ -32,10 +37,15 @@ public class CreateLoanService {
                 loanWrapper.setStatus("0");
                 loanWrapper.setMessage("Loan created successfully");
                 loanWrapper.setLoan(loans);
+                log.info("-----------------------[LOAN CREATED]---------------------\n{}", loanWrapper);
+                smsRequest.setPhoneNumber(user.getMsisdn());
+                smsRequest.setMessage("Your loan at LendTech has been approved");
+                smsService.sendSms(smsRequest);
                 return loanWrapper;
             }else{
                 loanWrapper.setStatus("2");
                 loanWrapper.setMessage("User does not exist");
+                log.info("-----------------------[USER DOES NOT EXIST]---------------------\n{}", loanWrapper);
                 return loanWrapper;
             }
         }catch(Exception e){
