@@ -3,10 +3,12 @@ package com.lendtech.repayment_api.models.database;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
+import lombok.AllArgsConstructor;
 import lombok.Data;
 
 @Data
 @Entity
+@AllArgsConstructor
 @Table(name = "LENDTECH_USERS")
 public class User {
 
@@ -34,4 +36,8 @@ public class User {
     @NotNull
     @Column(name = "GENDER", nullable = false)
     private String gender;
+
+    public User() {
+
+    }
 }
