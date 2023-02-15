@@ -25,11 +25,9 @@ spec:
           volumeMounts:
           - name: logback-mount
             mountPath: /mnt/logback/
-          - name: template-mount
-            mountPath: /mnt/templates/
           env:
             - name: JDBC_URL
-              value: jdbc:oracle:thin:@//10.219.2.45:1521/knob12
+              value: jdbc:h2:mem:mydb
             - name: DATABASE_USERNAME
               valueFrom:
                 secretKeyRef:
