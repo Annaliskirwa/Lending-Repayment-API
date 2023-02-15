@@ -13,4 +13,6 @@ public interface LoanRepository extends JpaRepository<Loans, Long> {
     List<Loans> findByUserID(Long userid);
 
     Loans findLoansByProductID(String productID);
+
+    Loans findTopByProductID(String productID);
 }
