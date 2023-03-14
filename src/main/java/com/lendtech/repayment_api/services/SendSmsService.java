@@ -17,12 +17,18 @@ public class SendSmsService{
     TwilioConfiguration twilioConfiguration;
 
     public void sendSms(SmsRequest smsRequest) {
+        try{
 
-        PhoneNumber to = new PhoneNumber(smsRequest.getPhoneNumber());
-        PhoneNumber from = new PhoneNumber(twilioConfiguration.getTrialNumber());
-        String message = smsRequest.getMessage();
-        MessageCreator creator = Message.creator(to, from, message);
+            PhoneNumber to = new PhoneNumber(smsRequest.getPhoneNumber());
+            PhoneNumber from = new PhoneNumber(twilioConfiguration.getTrialNumber());
+            String message = smsRequest.getMessage();
+            MessageCreator creator = Message.creator(to, from, message);
 
-        creator.create();
+            creator.create();
+
+            log.info("-----------------------[SMS SENT SUCCESSFULLY]---------------------\n");
+        }catch(Exception e){
+            log.info("-----------------------[ERROR:SMS COULD NOT BE SENT]---------------------\n{}", e.getMessage());
+        }
     }
 }

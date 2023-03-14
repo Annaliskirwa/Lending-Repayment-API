@@ -30,7 +30,7 @@ public class CreateUserService {
             }
             else{
                 userRepository.save(user);
-                userWrapper.setMessage("user created successfuly");
+                userWrapper.setMessage("user created successfully");
                 userWrapper.setStatus("0");
                 userWrapper.setUser(user);
                 log.info("-----------------------[USER CREATED]---------------------\n{}", userWrapper);
