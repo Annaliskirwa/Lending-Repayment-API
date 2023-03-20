@@ -5,20 +5,20 @@ jobs:
   publish-hello-docker-image:
     runs-on: ubuntu-latest
     steps:
-#      - uses: actions/checkout@v2
-#      - name: Login to GitHub Container Registry
-#        uses: docker/login-action@v1
-#        with:
-#          registry: ghcr.io
-#          username: Annaliskirwa
-#          password: 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
-#      - name: Maven
-#        run: |
-#          mvn package
-#      - name: Build the hello-docker Docker image
-#        run: |
-#          docker build . --tag kirwa9431/lendtech-repayment-api:latest
-#          docker push kirwa9431/lendtech-repayment-api:latest
+      - uses: actions/checkout@v2
+      - name: Login to GitHub Container Registry
+        uses: docker/login-action@v1
+        with:
+          registry: ghcr.io
+          username: Annaliskirwa
+          password: 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
+      - name: Maven
+        run: |
+          mvn package
+      - name: Build the hello-docker Docker image
+        run: |
+          docker build . --tag kirwa9431/lendtech-repayment-api:latest
+          docker push kirwa9431/lendtech-repayment-api:latest
       - name: Connect with openshift
         run: |
           oc login --token=sha256~TgrMefu3Fgd7kR9MuQUdnfqlteAcg4jLBbJVxERJOPE --server=https://api.sandbox-m2.ll9k.p1.openshiftapps.com:6443
@@ -27,7 +27,7 @@ jobs:
           oc project annaliskirwa-dev
       - name: Delete deployment
         run: |
-#          oc delete deployment container-registry-example
+          oc delete deployment container-registry-example
       - name: Deploy deployment files
         run: |
           oc apply -f ${GITHUB_WORKSPACE}/ocp -n annaliskirwa-dev

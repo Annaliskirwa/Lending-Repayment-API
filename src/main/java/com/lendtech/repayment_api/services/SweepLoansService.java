@@ -44,6 +44,7 @@ public class SweepLoansService {
                     defaultLoans.setUser(loans.getUser());
                     defaultLoans.setUpdatedDate(loans.getUpdatedDate());
                     defaultLoans.setCreatedDate(loans.getCreatedDate());
+                    defaultLoanRepository.save(defaultLoans);
                     loanRepository.delete(loans);
                     log.info("-----------------------[DEFAULT LOAN DELETED]---------------------\n{}", loans);
                 }
@@ -53,6 +54,5 @@ public class SweepLoansService {
         }
 
     }
-
 }
 
