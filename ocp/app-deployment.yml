@@ -56,4 +56,4 @@ spec:
               value: 'd83a82722409c5cde77c37860bb9863b'
             - name: TWILIO_TRIAL_NUMBER
               value: '+19124058761'
-          imagePullPolicy: IfNotPresent
+          imagePullPolicy: Always
