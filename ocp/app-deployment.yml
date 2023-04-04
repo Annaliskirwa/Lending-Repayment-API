@@ -58,8 +58,8 @@ spec:
               value: '+19124058761'
           resources:
             requests:
-              memory: "500Mi"
-              cpu: "500m"
+              memory: "125Mi"
+              cpu: "125m"
             limits:
               memory: "250Mi"
               cpu: "250m"
