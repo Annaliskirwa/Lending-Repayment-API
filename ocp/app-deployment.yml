@@ -63,4 +63,15 @@ spec:
             limits:
               memory: "250Mi"
               cpu: "250m"
+          readinessProbe:
+            tcpSocket:
+              port: 8080
+            initialDelaySeconds: 30
+            periodSeconds: 15
+
+          livenessProbe:
+            tcpSocket:
+              port: 8080
+            initialDelaySeconds: 30
+            periodSeconds: 15
           imagePullPolicy: Always
