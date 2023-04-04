@@ -56,4 +56,11 @@ spec:
               value: 'd83a82722409c5cde77c37860bb9863b'
             - name: TWILIO_TRIAL_NUMBER
               value: '+19124058761'
+          resources:
+            requests:
+              memory: "500Mi"
+              cpu: "500m"
+            limits:
+              memory: "250Mi"
+              cpu: "250m"
           imagePullPolicy: Always
