@@ -12,6 +12,10 @@ jobs:
           registry: ghcr.io
           username: Annaliskirwa
           password: ${{ secrets.LENDTECH_GITHUB_TOKEN }}
+      - name: Debug maven and java
+        run: |
+          java -version && mvn -v >> debug.txt
+          cat debug.txt
       - name: Maven
         run: |
           mvn package
