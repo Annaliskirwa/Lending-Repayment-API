@@ -33,17 +33,18 @@ jobs:
     needs: build-and-containerize
     runs-on: ubuntu-latest
     steps:
-      - name: Debug deployment files
-        run: ls
       - name: Connect with openshift
         run: |
           oc login --token=sha256~0Mu_dP7ESDP2cmkckrKpjH9pC2hog97Ri3SZar1PqgA --server=https://api.sandbox-m3.1530.p1.openshiftapps.com:6443
       - name: Select openshift project
         run: |
           oc project annaliskirwa-dev
-      - name: Delete deployment
-        run: |
-          oc delete deployment lendtech-repayment-api
+#      - name: Delete deployment
+#        run: |
+#          oc delete deployment lendtech-repayment-api
+#      - name: Deploy deployment files
+#        run: |
+#          oc apply -f ${GITHUB_WORKSPACE}/ocp -n annaliskirwa-dev
       - name: Deploy deployment files
         run: |
-          oc apply -f ${GITHUB_WORKSPACE}/ocp -n annaliskirwa-dev
+          oc apply -f ocp -n annaliskirwa-dev
