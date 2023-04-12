@@ -11,9 +11,9 @@ jobs:
       - name: Generate random image tag variable
       - id: imageTag
         run: |
-          export IMAGE_TAG=$((RANDOM))
-          echo "The random tag is $IMAGE_TAG"
-          echo "imageTag=$IMAGE_TAG" >> "$GITHUB_OUTPUT"
+#          export IMAGE_TAG=$((RANDOM))
+#          echo "The random tag is $IMAGE_TAG"
+          echo "imageTag==$((RANDOM))" >> "$GITHUB_OUTPUT"
   build-and-containerize:
     needs: get-random-image-tag
     runs-on: ubuntu-latest
