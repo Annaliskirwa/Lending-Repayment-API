@@ -36,6 +36,7 @@ jobs:
       - uses: actions/checkout@v2
       - name: Debug deployment files
         run: |
+          cd ..
           pwd
           ls
       - name: Connect with openshift
