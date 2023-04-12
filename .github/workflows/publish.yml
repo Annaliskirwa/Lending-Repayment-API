@@ -37,8 +37,10 @@ jobs:
           mvn package
       - name: Build, tag and push Docker image
         run: |
-          docker build . --tag ghcr.io/annaliskirwa/lendtech-repayment-api:${{ needs.get-random-image-tag.outputs.imageTag }}
-          docker push ghcr.io/annaliskirwa/lendtech-repayment-api:${{ needs.get-random-image-tag.outputs.imageTag }}
+          imagetag=${{ needs.get-random-image-tag.outputs.imageTag }}
+          echo $imagetag
+          docker build . --tag ghcr.io/annaliskirwa/lendtech-repayment-api:$imagetag
+          docker push ghcr.io/annaliskirwa/lendtech-repayment-api:$imagetag
   deploy-ocp-manifests:
     needs: build-and-containerize
     runs-on: ubuntu-latest
