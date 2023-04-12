@@ -2,7 +2,15 @@
 name: publish
 on: [push]
 jobs:
+  get-random-image-tag:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Generate random image tag variable
+        run: |
+          export IMAGE_TAG=$((RANDOM))
+          echo IMAGE=$IMAGE_TAG >> $GITHUB_ENV
   build-and-containerize:
+    needs: get-random-image-tag
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
@@ -27,9 +35,9 @@ jobs:
           mvn package
       - name: Build, tag and push Docker image
         run: |
-          docker build . --tag ghcr.io/annaliskirwa/lendtech-repayment-api:latest
-          docker push ghcr.io/annaliskirwa/lendtech-repayment-api:latest
-  deploy:
+          docker build . --tag ghcr.io/annaliskirwa/lendtech-repayment-api:${{ env.IMAGE_TAG }}
+          docker push ghcr.io/annaliskirwa/lendtech-repayment-api:${{ env.IMAGE_TAG }}
+  deploy-ocp-manifests:
     needs: build-and-containerize
     runs-on: ubuntu-latest
     steps:
