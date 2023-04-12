@@ -2,7 +2,7 @@
 name: publish
 on: [push]
 jobs:
-  publish-hello-docker-image:
+  build-and-containerize:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
@@ -11,7 +11,7 @@ jobs:
         with:
           registry: ghcr.io
           username: Annaliskirwa
-          password: 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
+          password: ${{ secrets.LENDTECH_GITHUB_TOKEN }}
       - name: Maven
         run: |
           mvn package
@@ -19,6 +19,9 @@ jobs:
         run: |
           docker build . --tag kirwa9431/lendtech-repayment-api:latest
           docker push kirwa9431/lendtech-repayment-api:latest
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
       - name: Connect with openshift
         run: |
           oc login --token=sha256~TgrMefu3Fgd7kR9MuQUdnfqlteAcg4jLBbJVxERJOPE --server=https://api.sandbox-m2.ll9k.p1.openshiftapps.com:6443
