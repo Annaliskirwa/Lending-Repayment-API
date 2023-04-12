@@ -10,7 +10,7 @@ jobs:
         run: |
           export IMAGE_TAG=$((RANDOM))
           echo IMAGE=$IMAGE_TAG >> $GITHUB_ENV
-          echo "The random tag is ${{ IMAGE_TAG }}"
+          echo "The random tag is $IMAGE_TAG"
   build-and-containerize:
     needs: get-random-image-tag
     runs-on: ubuntu-latest
