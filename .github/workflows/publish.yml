@@ -10,7 +10,7 @@ jobs:
         run: |
           export IMAGE_TAG=$((RANDOM))
           echo "The random tag is $IMAGE_TAG"
-          echo "::set-output name=imageTag::$IMAGE_TAG"
+          Write-Output "::set-output name=imageTag::IMAGE_TAG"
   build-and-containerize:
     needs: get-random-image-tag
     runs-on: ubuntu-latest
