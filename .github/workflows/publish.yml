@@ -5,11 +5,11 @@ jobs:
   get-random-image-tag:
     runs-on: ubuntu-latest
     outputs:
-      image: ${{ steps.imageTag.outputs.imageTag }}
+      image: ${{ steps.step1.outputs.imageTag }}
     steps:
       - uses: actions/checkout@v2
       - name: Generate random image tag variable
-      - id: imageTag
+      - id: step1
         run: |
 #          export IMAGE_TAG=$((RANDOM))
 #          echo "The random tag is $IMAGE_TAG"
@@ -40,10 +40,10 @@ jobs:
           mvn package
       - name: Build, tag and push Docker image
         run: |
-          imagetag=${{ needs.get-random-image-tag.outputs.image }}
-          echo $imagetag
-          docker build . --tag ghcr.io/annaliskirwa/lendtech-repayment-api:$imagetag
-          docker push ghcr.io/annaliskirwa/lendtech-repayment-api:$imagetag
+          IMAGETAG=${{ needs.get-random-image-tag.outputs.image }}
+          echo "The ouput from job one $IMAGETAG"
+          docker build . --tag ghcr.io/annaliskirwa/lendtech-repayment-api:$IMAGETAG
+          docker push ghcr.io/annaliskirwa/lendtech-repayment-api:$IMAGETAG
   deploy-ocp-manifests:
     needs: build-and-containerize
     runs-on: ubuntu-latest
