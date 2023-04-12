@@ -15,10 +15,10 @@ jobs:
       - name: Maven
         run: |
           mvn package
-      - name: Build the hello-docker Docker image
+      - name: Build, tag and push Docker image
         run: |
-          docker build . --tag kirwa9431/lendtech-repayment-api:latest
-          docker push kirwa9431/lendtech-repayment-api:latest
+          docker build . --tag ghcr.io/annaliskirwa/lendtech-repayment-api:latest
+          docker push ghcr.io/annaliskirwa/lendtech-repayment-api:latest
   deploy:
     runs-on: ubuntu-latest
     steps:
