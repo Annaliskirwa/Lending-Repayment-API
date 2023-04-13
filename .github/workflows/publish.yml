@@ -12,7 +12,7 @@ jobs:
         run: |
           echo ${{ env.IMAGE_TAG }}-${{ github.run_number }}-${{ github.run_attempt }}
   build-and-containerize:
-    needs: get-random-image-tag
+    needs: get-random-image-tag-value
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
