@@ -1,17 +1,19 @@
 #publish your docker image to github container registry
 name: publish
 on: [push]
+env:
+  IMAGE_TAG: ${{ github.run_id }}
 jobs:
-  get-random-image-tag:
+  get-random-image-tag-value:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-      - name: Generate random image tag variable
+      - name: Generate random image tag variable value
         run: |
-          export IMAGE_TAG=$((RANDOM))
-          echo IMAGE=$IMAGE_TAG >> $GITHUB_ENV
-          echo "The random tag is ${{ env.IMAGE_TAG }}"
-          echo ${{ github.run_id }}-${{ github.run_number }}-${{ github.run_attempt }}
+#          export IMAGE_TAG=$((RANDOM))
+#          echo IMAGE=$IMAGE_TAG >> $GITHUB_ENV
+#          echo "The random tag is ${{ env.IMAGE_TAG }}"
+          echo ${{ env.IMAGE_TAG }}-${{ github.run_number }}-${{ github.run_attempt }}
   build-and-containerize:
     needs: get-random-image-tag
     runs-on: ubuntu-latest
@@ -38,10 +40,8 @@ jobs:
           mvn package
       - name: Build, tag and push Docker image
         run: |
-          IMAGETAG=${{ needs.get-random-image-tag.outputs.image }}
-          echo "The ouput from job one $IMAGETAG"
-          docker build . --tag ghcr.io/annaliskirwa/lendtech-repayment-api:$IMAGETAG
-          docker push ghcr.io/annaliskirwa/lendtech-repayment-api:$IMAGETAG
+          docker build . --tag ghcr.io/annaliskirwa/lendtech-repayment-api:${{ env.IMAGE_TAG }}
+          docker push ghcr.io/annaliskirwa/lendtech-repayment-api:${{ env.IMAGE_TAG }}
   deploy-ocp-manifests:
     needs: build-and-containerize
     runs-on: ubuntu-latest
