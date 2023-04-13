@@ -4,17 +4,13 @@ on: [push]
 jobs:
   get-random-image-tag:
     runs-on: ubuntu-latest
-#    outputs:
-#      image: ${{ steps.step1.outputs.imageTag }}
     steps:
-#      - uses: actions/checkout@v2
+      - uses: actions/checkout@v2
       - name: Generate random image tag variable
-#      - id: step1
         run: |
-#          export IMAGE_TAG=$((RANDOM))
-#          echo "The random tag is $IMAGE_TAG"
-#          echo "imageTag==$((RANDOM))" >> "$GITHUB_OUTPUT"
-#          echo "imageTag==$((RANDOM))" >> "$GITHUB_OUTPUT"
+          export IMAGE_TAG=$((RANDOM))
+          echo IMAGE=$IMAGE_TAG >> $GITHUB_ENV
+          echo "The random tag is ${{ env.IMAGE_TAG }}"
           echo ${{ github.run_id }}-${{ github.run_number }}-${{ github.run_attempt }}
   build-and-containerize:
     needs: get-random-image-tag
