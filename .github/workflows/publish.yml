@@ -7,7 +7,7 @@ jobs:
 #    outputs:
 #      image: ${{ steps.step1.outputs.imageTag }}
     steps:
-      - uses: actions/checkout@v2
+#      - uses: actions/checkout@v2
       - name: Generate random image tag variable
 #      - id: step1
         run: |
