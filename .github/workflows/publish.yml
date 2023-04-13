@@ -55,12 +55,9 @@ jobs:
       - name: Select openshift project
         run: |
           oc project annaliskirwa-dev
-#      - name: Delete deployment
-#        run: |
-#          oc delete deployment lendtech-repayment-api
-#      - name: Deploy deployment files
-#        run: |
-#          oc apply -f ${GITHUB_WORKSPACE}/ocp -n annaliskirwa-dev
+      - name: Delete deployment
+        run: |
+          oc delete deployment lendtech-repayment-api
       - name: Deploy deployment files
         run: |
           oc apply -f ${{ github.workspace }}/ocp -n annaliskirwa-dev
