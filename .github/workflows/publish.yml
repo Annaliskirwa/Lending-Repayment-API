@@ -13,7 +13,9 @@ jobs:
         run: |
 #          export IMAGE_TAG=$((RANDOM))
 #          echo "The random tag is $IMAGE_TAG"
-          echo "imageTag==$((RANDOM))" >> "$GITHUB_OUTPUT"
+#          echo "imageTag==$((RANDOM))" >> "$GITHUB_OUTPUT"
+#          echo "imageTag==$((RANDOM))" >> "$GITHUB_OUTPUT"
+          echo ${{ github.run_id }}-${{ github.run_number }}-${{ github.run_attempt }}
   build-and-containerize:
     needs: get-random-image-tag
     runs-on: ubuntu-latest
