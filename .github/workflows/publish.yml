@@ -58,7 +58,7 @@ jobs:
         run: |
           echo "Installing yq"
           sudo wget https://github.com/mikefarah/yq/releases/latest/download/yq_linux_amd64 -O /usr/bin/yq && sudo chmod +x /usr/bin/yq
-          yq -- version >> yq.text
+          yq --version >> yq.text
           cat yq.txt
       - name: Clone the API chart repository
         run: |
