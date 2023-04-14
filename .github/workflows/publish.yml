@@ -82,7 +82,21 @@ jobs:
           if [ -f values.yaml ];
           then yq e '.image.tag=${{ env.IMAGE_TAG }}' -i values.yaml && cat values.yaml;
           fi
-
+      - name: Commit the image tag changes
+        run: |
+          cd _Repayment_API_HelmChart
+          pwd
+          ls -la
+          git config --global user.name "${{ env.CI_COMMIT_AUTHOR }}"
+          git config --global user.email "${{ env.CI_COMMIT_EMAIL }}"
+          git add .
+          git commit -am "${{ env.CI_COMMIT_MESSAGE }}"
+          echo "Committed successfully"
+      - name: Push the changes
+        run: |
+          cd _Repayment_API_HelmChart
+          git push https://${{ secrets.LENDTECH_HELM_TOKEN }}@github.com/Annaliskirwa/Repayment_API_HelmChart.git HEAD:master --force
+          echo "Pushed successfully"
   deploy-ocp-manifests:
     needs: update-helm-chart-image-tag
     runs-on: ubuntu-latest
