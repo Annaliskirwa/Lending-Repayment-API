@@ -60,6 +60,28 @@ jobs:
           sudo wget https://github.com/mikefarah/yq/releases/latest/download/yq_linux_amd64 -O /usr/bin/yq && sudo chmod +x /usr/bin/yq
           yq -- version >> yq.text
           cat yq.txt
+      - name: Clone the API chart repository
+        run: |
+          echo "Cloning the repository"
+          git clone https://github.com/Annaliskirwa/Repayment_API_HelmChart.git
+          echo "Cloned the repository"
+      - name: Switching to master
+        run: |
+          ls -la
+          echo "Switching folders"
+          cd _Repayment_API_HelmChart
+          ls -la
+          git switch master
+          echo "Switched branch to master"
+      - name: Update image tag for values profiles file
+        run: |
+          cd _Repayment_API_HelmChart
+          echo "Trying to update image tags"
+          pwd
+          echo "Updating values yaml"
+          if [ -f values.yaml ];
+          then yq e '.image.tag=${{ env.IMAGE_TAG }}' -i values.yaml && cat values.yaml;
+          fi
 
   deploy-ocp-manifests:
     needs: update-helm-chart-image-tag
