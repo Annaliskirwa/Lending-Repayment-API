@@ -11,6 +11,7 @@ jobs:
       - name: Generate random image tag variable value
         run: |
           echo ${{ env.IMAGE_TAG }}-${{ github.run_number }}-${{ github.run_attempt }}
+
   build-and-containerize:
     needs: get-random-image-tag-value
     runs-on: ubuntu-latest
@@ -39,8 +40,29 @@ jobs:
         run: |
           docker build . --tag ghcr.io/annaliskirwa/lendtech-repayment-api:${{ env.IMAGE_TAG }}
           docker push ghcr.io/annaliskirwa/lendtech-repayment-api:${{ env.IMAGE_TAG }}
-  deploy-ocp-manifests:
+
+  update-helm-chart-image-tag:
     needs: build-and-containerize
+    runs-on: ubuntu-latest
+    env:
+      CI_COMMIT_MESSAGE: Continuous Integration For Changing Tag in Chart
+      CI_COMMIT_AUTHOR: Annaliskirwa
+      CI_COMMIT_EMAIL: annaliskirwa@gmail.com
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          token: ${{ secrets.LENDTECH_HELM_TOKEN }}
+          repository: Annaliskirwa/Repayment_API_HelmChart
+          ref: master
+      - name: Install yq
+        run: |
+          echo "Installing yq"
+          sudo wget https://github.com/mikefarah/yq/releases/latest/download/yq_linux_amd64 -O /usr/bin/yq && sudo chmod +x /usr/bin/yq
+          yq -- version >> yq.text
+          cat yq.txt
+
+  deploy-ocp-manifests:
+    needs: update-helm-chart-image-tag
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
