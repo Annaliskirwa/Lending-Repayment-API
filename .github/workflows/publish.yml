@@ -1,8 +1,19 @@
 #publish your docker image to github container registry
 name: publish
 on: [push]
+env:
+  IMAGE_TAG: ${{ github.run_id }}
 jobs:
-  publish-hello-docker-image:
+  get-random-image-tag-value:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Generate random image tag variable value
+        run: |
+          echo ${{ env.IMAGE_TAG }}-${{ github.run_number }}-${{ github.run_attempt }}
+
+  build-and-containerize:
+    needs: get-random-image-tag-value
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
@@ -11,23 +22,100 @@ jobs:
         with:
           registry: ghcr.io
           username: Annaliskirwa
-          password: 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
-      - name: Maven
+          password: ${{ secrets.LENDTECH_GITHUB_TOKEN }}
+      - uses: actions/checkout@v3
+      - name: Set up JDK 17
+        uses: actions/setup-java@v3
+        with:
+          java-version: 17
+          distribution: 'adopt'
+      - name: Debug maven and java
+        run: |
+          java -version && mvn -v >> debug.txt
+          cat debug.txt
+      - name: Build with Maven
         run: |
           mvn package
-      - name: Build the hello-docker Docker image
+      - name: Build, tag and push Docker image
         run: |
-          docker build . --tag kirwa9431/lendtech-repayment-api:latest
-          docker push kirwa9431/lendtech-repayment-api:latest
+          docker build . --tag ghcr.io/annaliskirwa/lendtech-repayment-api:${{ env.IMAGE_TAG }}
+          docker push ghcr.io/annaliskirwa/lendtech-repayment-api:${{ env.IMAGE_TAG }}
+
+  update-helm-chart-image-tag:
+    needs: build-and-containerize
+    runs-on: ubuntu-latest
+    env:
+      CI_COMMIT_MESSAGE: Continuous Integration For Changing Tag in Chart
+      CI_COMMIT_AUTHOR: Annaliskirwa
+      CI_COMMIT_EMAIL: annaliskirwa@gmail.com
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          token: ${{ secrets.LENDTECH_HELM_TOKEN }}
+          repository: Annaliskirwa/Repayment_API_HelmChart
+          ref: master
+      - name: Install yq
+        run: |
+          echo "Installing yq"
+          sudo wget https://github.com/mikefarah/yq/releases/latest/download/yq_linux_amd64 -O /usr/bin/yq && sudo chmod +x /usr/bin/yq
+          yq --version >> yq.txt
+          cat yq.txt
+      - name: Clone the API chart repository
+        run: |
+          echo "Cloning the repository"
+          git clone https://github.com/Annaliskirwa/Repayment_API_HelmChart.git
+          echo "Cloned the repository"
+      - name: Switching to master
+        run: |
+          ls -la
+          echo "Switching folders"
+          cd Repayment_API_HelmChart
+          ls -la
+          git switch master
+          echo "Switched branch to master"
+      - name: Update image tag for values profiles file
+        run: |
+          cd Repayment_API_HelmChart/applications/lendtech-repayment-api
+          echo "Trying to update image tags"
+          pwd
+          echo "Updating values yaml"
+          if [ -f values.yaml ];
+          then yq e '.image.tag=${{ env.IMAGE_TAG }}' -i values.yaml && cat values.yaml;
+          fi
+      - name: Commit the image tag changes
+        run: |
+          cd Repayment_API_HelmChart
+          pwd
+          ls -la
+          git config --global user.name "${{ env.CI_COMMIT_AUTHOR }}"
+          git config --global user.email "${{ env.CI_COMMIT_EMAIL }}"
+          git add .
+          git commit -am "${{ env.CI_COMMIT_MESSAGE }}"
+          echo "Committed successfully"
+      - name: Push the changes
+        run: |
+          cd Repayment_API_HelmChart
+          git push https://${{ secrets.LENDTECH_HELM_TOKEN }}@github.com/Annaliskirwa/Repayment_API_HelmChart.git HEAD:master --force
+          echo "Pushed successfully"
+  deploy-ocp-manifests:
+    needs: update-helm-chart-image-tag
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Debug deployment files and change pwd
+        run: |
+          cd ..
+          pwd
+          ls
       - name: Connect with openshift
         run: |
-          oc login --token=sha256~TgrMefu3Fgd7kR9MuQUdnfqlteAcg4jLBbJVxERJOPE --server=https://api.sandbox-m2.ll9k.p1.openshiftapps.com:6443
+          oc login --token=sha256~${{ secrets.LENDTECH_OCP_TOKEN }} --server=https://api.sandbox-m3.1530.p1.openshiftapps.com:6443
       - name: Select openshift project
         run: |
           oc project annaliskirwa-dev
       - name: Delete deployment
         run: |
-          oc delete deployment container-registry-example
+          oc delete deployment lendtech-repayment-api
       - name: Deploy deployment files
         run: |
-          oc apply -f ${GITHUB_WORKSPACE}/ocp -n annaliskirwa-dev
+          oc apply -f ${{ github.workspace }}/ocp -n annaliskirwa-dev
