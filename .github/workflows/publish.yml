@@ -69,13 +69,13 @@ jobs:
         run: |
           ls -la
           echo "Switching folders"
-          cd _Repayment_API_HelmChart
+          cd Repayment_API_HelmChart
           ls -la
           git switch master
           echo "Switched branch to master"
       - name: Update image tag for values profiles file
         run: |
-          cd _Repayment_API_HelmChart
+          cd Repayment_API_HelmChart/applications/lendtech-repayment-api
           echo "Trying to update image tags"
           pwd
           echo "Updating values yaml"
@@ -84,7 +84,7 @@ jobs:
           fi
       - name: Commit the image tag changes
         run: |
-          cd _Repayment_API_HelmChart
+          cd Repayment_API_HelmChart
           pwd
           ls -la
           git config --global user.name "${{ env.CI_COMMIT_AUTHOR }}"
@@ -94,7 +94,7 @@ jobs:
           echo "Committed successfully"
       - name: Push the changes
         run: |
-          cd _Repayment_API_HelmChart
+          cd Repayment_API_HelmChart
           git push https://${{ secrets.LENDTECH_HELM_TOKEN }}@github.com/Annaliskirwa/Repayment_API_HelmChart.git HEAD:master --force
           echo "Pushed successfully"
   deploy-ocp-manifests:
